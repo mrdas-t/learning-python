@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import subprocess
 from datetime import datetime
 
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -53,6 +54,20 @@ def check_status(server,status):
 def print_region(server,region):
     print(f"[{now}] {server} is in {region} region.")
 
+def check_ping(server, host):
+    result = subprocess.run(
+        ["ping", "-c", "1", host],   # ping the host
+        capture_output=True,
+        text=True
+    )
+    if result.returncode == 0:
+        print(f"[{now}] {server} is reachable")
+        return False
+    else:
+        print(f"[{now}] {server} is UNREACHABLE!")
+        return True
+    
+
 critical_servers = 0
 total_servers = 0
 filename = "servers.json"
@@ -76,6 +91,8 @@ try:
         if check_memory(server["name"], server["memory"]):
             critical_servers += 1
         if check_status(server["name"], server["status"]):
+            critical_servers += 1
+        if check_ping(server["name"], server["host"]):
             critical_servers += 1
         print_region(server["name"], server["region"])
 
