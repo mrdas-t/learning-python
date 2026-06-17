@@ -1,0 +1,5 @@
+web-01,55,99,50,running,east
+web-02,65,10,99,running,north
+web-03,75,20,12,stopped,south
+web-04,85,30,45,running,west
+web-05,95,40,90,running,east
