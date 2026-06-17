@@ -1,0 +1,4 @@
+*.log
+gitPAT
+servers.json
+server_log.txt
