@@ -3,6 +3,7 @@ import sys
 import json
 import subprocess
 from datetime import datetime
+import requests
 
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -66,7 +67,21 @@ def check_ping(server, host):
     else:
         print(f"[{now}] {server} is UNREACHABLE!")
         return True
-    
+
+def check_web(server,url):
+    try:
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
+            print(f"[{now}] {server} HTTP OK - {response.status_code}")
+            return False
+        else:
+            print(f"[{now}] {server} HTTP Warning - {response.status_code}")
+    except requests.exceptions.ConnectionError:
+        print(f"[{now}] {server} is UNREACABLE!")
+        return True
+    except requests.exceptions.Timeout:
+        print (f"[{now}] {server} has TIMED OUT")
+        return True
 
 critical_servers = 0
 total_servers = 0
@@ -93,6 +108,8 @@ try:
         if check_status(server["name"], server["status"]):
             critical_servers += 1
         if check_ping(server["name"], server["host"]):
+            critical_servers += 1
+        if check_web(server["name"], server["url"]):
             critical_servers += 1
         print_region(server["name"], server["region"])
 
