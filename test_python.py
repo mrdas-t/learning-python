@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 api_key = os.environ.get("API_KEY")
-print(api_key)
+db_password = os.environ.get("DB_PASSWORD")
