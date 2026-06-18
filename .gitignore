@@ -3,3 +3,4 @@ gitPAT
 servers.json
 server_log.txt
 .venv
+.env

@@ -4,11 +4,17 @@ import json
 import subprocess
 from datetime import datetime
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+env = os.environ.get("MONITOR_ENV")
+print(env)
+
 def check_cpu(server,cpu_usage):
-    if cpu_usage > 90:
+    if cpu_usage > int(os.environ.get("MAX_CPU", 90)):
         print(f"[{now}] CRITICAL: {server} CPU is above 90%!")
         with open("alerts.log","a") as log:
             log.write(f"[{now}] CRITICAL: {server} CPU is above 90%!\n")
@@ -20,7 +26,7 @@ def check_cpu(server,cpu_usage):
         return False
 
 def check_disk (server,disk_usage):
-    if disk_usage > 90:
+    if disk_usage > int(os.environ.get("MAX_DISK", 90)):
         print(f"[{now}] CRITICAL: {server} disk usage is above 90%!")
         with open("alerts.log","a") as log:
             log.write(f"[{now}] CRITICAL: {server} DISK is above 90%!\n")
@@ -32,7 +38,7 @@ def check_disk (server,disk_usage):
         return False
 
 def check_memory(server,memory_usage):
-    if memory_usage > 90:
+    if memory_usage > int(os.environ.get("MAX_MEMORY", 90)):
         print(f"[{now}] CRITICAL: {server} memory is above 90%!")
         with open("alerts.log","a") as log:
             log.write(f"[{now}] CRITICAL: {server} MEMORY is above 90%!\n")
@@ -118,8 +124,8 @@ try:
 
 except FileNotFoundError:
     print("Error: File not found.")
-except ValueError:
-    print("Error: incorrect value in dictionary")
+except ValueError as e:
+    print(f"Error: {e}")
 except Exception as e:
     print(f"Error: {e}")
 finally:
