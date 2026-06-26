@@ -119,5 +119,12 @@ for server in servers:
     print(f"---{server.name}---")
     total_critical += server.run_all_checks()
 
+critical_servers = [s.name for s in servers if s.cpu > 90]
+stopped_servers = [s.name for s in servers if s.status != "running"]
+high_memory = [s.name for s in servers if s.memory > 85]
+
+print(f"\nCritical CPU servers: {critical_servers}")
+print(f"Stopped servers: {stopped_servers}")
+print(f"High memory servers: {high_memory}")
 print(f"\nTotal servers checked: {len(servers)}")
 print(f"CRITICAL issues: {total_critical}")

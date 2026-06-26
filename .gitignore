@@ -4,3 +4,4 @@ servers.json
 server_log.txt
 .venv
 .env
+claude_down.py
