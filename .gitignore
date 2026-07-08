@@ -5,3 +5,4 @@ server_log.txt
 .venv
 .env
 claude_down.py
+logs/

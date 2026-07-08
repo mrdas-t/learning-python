@@ -122,6 +122,7 @@ for server in servers:
 critical_servers = [s.name for s in servers if s.cpu > 90]
 stopped_servers = [s.name for s in servers if s.status != "running"]
 high_memory = [s.name for s in servers if s.memory > 85]
+urls = [s.url for s in servers if s.url != ""]
 
 print(f"\nCritical CPU servers: {critical_servers}")
 print(f"Stopped servers: {stopped_servers}")
