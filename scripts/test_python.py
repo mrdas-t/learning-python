@@ -1,7 +1,14 @@
-import os
-from dotenv import load_dotenv
+import yaml
+import json
 
-load_dotenv()
+#read the JSON file
+with open("config/servers.json", "r") as file:
+    data = json.load(file)
 
-api_key = os.environ.get("API_KEY")
-db_password = os.environ.get("DB_PASSWORD")
+#write the YAML file
+with open("config/servers.yaml", "w") as file:
+    yaml.dump(data, file, default_flow_style=False)
+
+print("Converted JSON to YAML format")
+
+

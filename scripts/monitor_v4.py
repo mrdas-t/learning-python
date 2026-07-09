@@ -4,6 +4,7 @@ import subprocess
 from datetime import datetime
 import json
 import sys
+import yaml
 
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -94,14 +95,14 @@ class Server:
             critical += 1
         return critical
 
-filename = "servers.json"
+filename = "config/servers.yaml"
 
 if not os.path.exists(filename):
     print("Error: servers.json file not found.")
     sys.exit(1)
 
 with open(filename, "r") as file:
-    data = json.load(file)
+    data = yaml.safe_load(file)
 
 #start with an empty list
 servers = []
