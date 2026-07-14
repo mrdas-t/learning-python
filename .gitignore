@@ -1,6 +1,7 @@
 *.log
 gitPAT
 servers.json
+servers.yaml
 server_log.txt
 .venv
 .env

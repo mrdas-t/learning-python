@@ -48,3 +48,15 @@ else:
     print(f"Stars: {repo['stargazers_count']}")
     print(f"Open issues: {repo['open_issues_count']}")
     print(f"Last updated: {repo['updated_at']}")
+
+webhook=os.environ.get("SLACK_WEBHOOK")
+
+def send_slack(message):
+    payload = {"text": message}
+    response = requests.post(webhook, json=payload)
+    if response.status_code == 200:
+        print("Alert sent to Slack!")
+    else:
+        print(f"Failed to send alert: {response.status_code}")
+
+send_slack("Test alert from Python.")

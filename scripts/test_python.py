@@ -1,14 +1,10 @@
-import yaml
-import json
+import requests
 
-#read the JSON file
-with open("config/servers.json", "r") as file:
-    data = json.load(file)
+username = "mrdas-t"
+response = requests.get(f"https://api.github.com/users/{username}")
+data = response.json()
 
-#write the YAML file
-with open("config/servers.yaml", "w") as file:
-    yaml.dump(data, file, default_flow_style=False)
-
-print("Converted JSON to YAML format")
-
-
+print(f"Username: {data['login']}")
+print(f"Account created: {data['created_at']}")
+print(f"Public repos: {data['public_repos']}")
+print(f"Followers: {data['followers']}")

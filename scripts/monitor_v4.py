@@ -5,8 +5,19 @@ from datetime import datetime
 import json
 import sys
 import yaml
+from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+webhook=os.environ.get("SLACK_WEBHOOK")
+
+def send_slack(message):
+    payload = {"text": message}
+    response = requests.post(webhook, json=payload)
+    if response.status_code != 200:
+        print(f"Failed to send alert: {response.status_code}")
 
 class Server:
     def __init__(self, name, cpu, memory, disk, status, region, host, url):
@@ -18,10 +29,12 @@ class Server:
         self.region = region
         self.host = host
         self.url = url
-    
+
     def check_cpu(self):
         if self.cpu > 90:
-            print(f"{self.name} CPU is CRITICAL")
+            message = f":red_circle: CRITICAL: {self.name} CPU is above 90%"
+            print(message)
+            send_slack(message)
             return True
         else:
             print(f"{self.name} CPU is OK")
@@ -29,15 +42,18 @@ class Server:
     
     def check_disk(self):
         if self.disk > 90:
-            print(f"{self.name} disk is at greater than 90%.")
-            return True
+            message = f":red_circle: CRITICAL: {self.name} Disk Usage is above 90%"
+            print(message)
+            send_slack(message)
         else:
             print(f"{self.name} disk is OK")
             return False
 
     def check_memory(self):
         if self.memory > 90:
-            print(f"{self.name} memory is at greater than 90%.")
+            message = f":red_circle: CRITICAL: {self.name} Memory is above 90%"
+            print(message)
+            send_slack(message)
             return True
         else:
             print(f"{self.name} memory is OK")
@@ -45,8 +61,9 @@ class Server:
 
     def check_status(self):
         if self.status != "running":
-            print(f"{self.name} is DOWN!")
-            return True
+            message = f":red_circle: CRITICAL: {self.name} is DOWN"
+            print(message)
+            send_slack(message)
         else:
             print(f"{self.name} is UP.")
             return False
@@ -61,7 +78,9 @@ class Server:
             print(f"[{now}] {self.name} is reachable")
             return False
         else:
-            print(f"[{now}] {self.name} is UNREACHABLE!")
+            message = f":red_circle: CRITICAL: {self.name} is UNREACHABLE"
+            print(message)
+            send_slack(message)
             return True
 
     def check_web(self):
